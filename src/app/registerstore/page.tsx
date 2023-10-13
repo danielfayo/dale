@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { auth, firestore } from "@/firebase/clientApp";
 import { fetchUserDetails } from "@/firebase/fetchUserDetails";
+import { useAppSelector } from "@/redux/store";
 import { doc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -13,21 +14,20 @@ import { useAuthState } from "react-firebase-hooks/auth";
 type pageProps = {};
 
 const page: React.FC<pageProps> = () => {
-  const {data} = fetchUserDetails()
+  const [user] = useAuthState(auth);
   const [storeDetails, setStoreDetails] = useState({
     storeName: "",
     headline: "",
   });
-  const [user] = useAuthState(auth);
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setStoreDetails((prev) => ({
-      ...prev,
-      [event.target.id]: event.target.value,
-    }));
-  };
-
+    ) => {
+      setStoreDetails((prev) => ({
+        ...prev,
+        [event.target.id]: event.target.value,
+      }));
+    };
+    
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -47,8 +47,6 @@ const page: React.FC<pageProps> = () => {
       console.log(error);
     }
   };
-
-  console.log(data)
 
   return (
     <div className="w-[20rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">

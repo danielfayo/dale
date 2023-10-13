@@ -1,10 +1,13 @@
 "use client";
 
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, firestore } from "./clientApp";
+import { User } from "@/lib/types";
+import { updateAllUser } from "@/redux/features/userDetailSlice";
+import { AppDispatc } from "@/redux/store";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { User } from "@/lib/types";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDispatch } from "react-redux";
+import { auth, firestore } from "./clientApp";
 
 export const fetchUserDetails = () => {
   const [user] = useAuthState(auth);
@@ -12,10 +15,13 @@ export const fetchUserDetails = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const dispatch = useDispatch<AppDispatc>()
   const docRef = doc(firestore, "users", `${user?.uid}`);
 
   useEffect(()=> {
-    handleFetchData()
+    if (user){
+      handleFetchData()
+    }
   }, [user])
 
   const handleFetchData = async () => {
@@ -25,6 +31,7 @@ export const fetchUserDetails = () => {
       const docData = docSnapshot.data();
       if (docData) {
         setData(docData as User);
+        dispatch(updateAllUser(docData as User))
       }
     } catch (error: any) {
         setError(error)

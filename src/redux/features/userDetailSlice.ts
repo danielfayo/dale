@@ -2,13 +2,25 @@ import { fetchUserDetails } from "@/firebase/fetchUserDetails";
 import { User } from "@/lib/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const { data } = fetchUserDetails();
+const initialState: { userDetails: User } = {
+  userDetails: {
+    email: "",
+    typeOfUser: "",
+    uid: "",
+    storeName: "",
+    storeHeadline: "",
+  },
+};
 
 export const userDetails = createSlice({
   name: "userDetails",
-  initialState : data,
-  reducers: {}
+  initialState,
+  reducers: {
+    updateAllUser: (state, action: PayloadAction<User>) => {
+      state.userDetails = action.payload;
+    },
+  },
 });
 
-export const {  } = userDetails.actions;
+export const {updateAllUser} = userDetails.actions;
 export default userDetails.reducer;
