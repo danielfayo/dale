@@ -1,9 +1,12 @@
+"use client"
+
+import { fetchUserDetails } from '@/firebase/fetchUserDetails';
 import PageContentLayout from '@/layouts/PageContentLayout'
-import Image from 'next/image'
 
 export default function Home() {
+  const { userDetails } = fetchUserDetails();
   return (
-    <PageContentLayout>
+    <PageContentLayout userDetails={userDetails}>
       <div className=''>
 hey
       </div>

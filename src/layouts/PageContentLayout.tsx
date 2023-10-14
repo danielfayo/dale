@@ -12,12 +12,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import SidebarContent from "@/components/ui/SidebarContent";
+import { User } from "@/lib/types";
 
 type PageContentLayoutProps = {
   children: React.ReactNode;
+  userDetails: User
 };
 
-const PageContentLayout: React.FC<PageContentLayoutProps> = ({ children }) => {
+const PageContentLayout: React.FC<PageContentLayoutProps> = ({ children, userDetails }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleToggle = () => {
@@ -25,7 +27,7 @@ const PageContentLayout: React.FC<PageContentLayoutProps> = ({ children }) => {
   };
   return (
     <div>
-      <Sidebar isOpen={sidebarOpen} toggle={handleToggle} />
+      <Sidebar userDetails={userDetails} isOpen={sidebarOpen} toggle={handleToggle} />
       <div
         className={`${
           sidebarOpen ? "w-[calc(100vw - 15rem)] md:ml-[16rem]" : "ml-12"
@@ -43,7 +45,7 @@ const PageContentLayout: React.FC<PageContentLayoutProps> = ({ children }) => {
               <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold">dale</h1>
               </div>
-              <SidebarContent />
+              <SidebarContent userDetails={userDetails} />
             </nav>
           </SheetContent>
         </Sheet>

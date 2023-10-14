@@ -1,13 +1,15 @@
 import { PanelLeft } from "lucide-react";
 import React from "react";
 import SidebarContent from "./SidebarContent";
+import { User } from "@/lib/types";
 
 type SidebarProps = {
   isOpen: boolean
   toggle: () => void
+  userDetails: User
 };
 
-const Sidebar: React.FC<SidebarProps> = ({isOpen, toggle}) => {
+const Sidebar: React.FC<SidebarProps> = ({isOpen, toggle, userDetails}) => {
   const sellerLinks = [
     "Home",
     "Products",
@@ -23,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpen, toggle}) => {
         <h1 className="text-3xl font-bold">dale</h1>
         <PanelLeft onClick={toggle} className="cursor-pointer" />
       </div>
-      <SidebarContent/>
+      <SidebarContent userDetails={userDetails}/>
     </nav>
   );
 };

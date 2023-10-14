@@ -1,16 +1,16 @@
 import { fetchUserDetails } from '@/firebase/fetchUserDetails';
-import { useAppSelector } from '@/redux/store';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from './button';
+import { User } from '@/lib/types';
 
 type SidebarContentProps = {
-    
+    userDetails: User
 };
 
-const SidebarContent:React.FC<SidebarContentProps> = () => {
-    const { data } = fetchUserDetails();
-  const userDetails = useAppSelector((state) => state.userDetails.userDetails);
+const SidebarContent:React.FC<SidebarContentProps> = ({userDetails}) => {
+  
+    // console.log(userDetails)
     
     return (
         <>
