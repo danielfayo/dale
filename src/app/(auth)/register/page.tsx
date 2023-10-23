@@ -3,7 +3,7 @@
 import SignupInputs from "@/components/auth/SignupInputs";
 import { toast } from "@/components/ui/use-toast";
 import { auth, firestore } from "@/firebase/clientApp";
-import { User } from "@/lib/types";
+import { User } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ const page: React.FC<pageProps> = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpForm((prev) => ({
@@ -30,6 +31,7 @@ const page: React.FC<pageProps> = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true)
     try {
       createUserWithEmailAndPassword(signUpForm.email, signUpForm.password);
     } catch (error) {
@@ -37,6 +39,7 @@ const page: React.FC<pageProps> = () => {
         toast({ title: "Something went wrong", variant: "destructive" });
       }
     }
+    setIsLoading(false)
   };
 
   const createUserDocument = async (user: User) => {
@@ -45,20 +48,13 @@ const page: React.FC<pageProps> = () => {
   };
 
   useEffect(() => {
-    const userDoc: User = {
-      email: userCred?.user.email,
-      uid: userCred?.user.uid,
-      typeOfUser: "user",
-      storeHeadline: null,
-      storeName: null,
-    };
 
     if (userCred) {
-      createUserDocument(userDoc);
+      createUserDocument(userCred.user);
       toast({
         title: "Accout Created Successfully",
       });
-      router.push("/registerstore");
+      router.push("");
     }
   }, [userCred]);
 
@@ -67,6 +63,7 @@ const page: React.FC<pageProps> = () => {
       handleChange={handleChange}
       signUpForm={signUpForm}
       onSubmit={handleSubmit}
+      loading={isLoading}
     />
   );
 };

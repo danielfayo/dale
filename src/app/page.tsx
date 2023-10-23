@@ -1,15 +1,11 @@
-"use client"
+"use client";
 
-import { fetchUserDetails } from '@/firebase/fetchUserDetails';
-import PageContentLayout from '@/layouts/PageContentLayout'
+import { fetchUserDetails } from "@/firebase/fetchUserDetails";
+import PageContentLayout from "@/layouts/PageContentLayout";
 
 export default function Home() {
   const { userDetails } = fetchUserDetails();
   return (
-    <PageContentLayout userDetails={userDetails}>
-      <div className=''>
-hey
-      </div>
-    </PageContentLayout>
-  )
+    <>Landing Page</>
+  );
 }

@@ -2,14 +2,16 @@ import React, {  } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 type SignupInputsProps = {
     signUpForm: {email: string, password: string}
     handleChange: (event : React.ChangeEvent<HTMLInputElement>) => void
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+    loading: boolean
 };
 
-const SignupInputs: React.FC<SignupInputsProps> = ({signUpForm, handleChange, onSubmit}) => {
+const SignupInputs: React.FC<SignupInputsProps> = ({signUpForm, handleChange, onSubmit, loading}) => {
   
 
   return (
@@ -20,12 +22,6 @@ const SignupInputs: React.FC<SignupInputsProps> = ({signUpForm, handleChange, on
           <span className="text-sm text-gray-400">
             Please enter your details below to create an account
           </span>
-          <span className="text-sm text-gray-400 mt-4">
-          Want to sell instead?{" "}
-          <Link className="text-primary underline underline-offset-2" href={"/createstore"}>
-            Become a seller
-          </Link>
-        </span>
         </div>
 
         <form onSubmit={onSubmit}>
@@ -51,12 +47,12 @@ const SignupInputs: React.FC<SignupInputsProps> = ({signUpForm, handleChange, on
               required
             />
           </div>
-          <Button type="submit" className="mt-8 mb-4 w-full">Create Account</Button>
+          <Button disabled={loading} type="submit" className="mt-8 mb-4 w-full">{loading ? (<Loader2 size={16}/>) : "Create Account"}</Button>
         </form>
 
         <span className="text-sm text-gray-400">
           Already have an account?{" "}
-          <Link className="text-primary underline underline-offset-2" href={""}>
+          <Link className="text-primary underline underline-offset-2" href={"/signin"}>
             Sign In
           </Link>
         </span>
