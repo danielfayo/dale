@@ -20,7 +20,6 @@ const page: React.FC<pageProps> = () => {
     email: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpForm((prev) => ({
@@ -31,7 +30,6 @@ const page: React.FC<pageProps> = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true)
     try {
       createUserWithEmailAndPassword(signUpForm.email, signUpForm.password);
     } catch (error) {
@@ -39,7 +37,6 @@ const page: React.FC<pageProps> = () => {
         toast({ title: "Something went wrong", variant: "destructive" });
       }
     }
-    setIsLoading(false)
   };
 
   const createUserDocument = async (user: User) => {
@@ -54,7 +51,7 @@ const page: React.FC<pageProps> = () => {
       toast({
         title: "Accout Created Successfully",
       });
-      router.push("");
+      router.push("/store");
     }
   }, [userCred]);
 
@@ -63,7 +60,8 @@ const page: React.FC<pageProps> = () => {
       handleChange={handleChange}
       signUpForm={signUpForm}
       onSubmit={handleSubmit}
-      loading={isLoading}
+      loading={loading}
+      error={error}
     />
   );
 };

@@ -1,13 +1,15 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
-import { fetchUserDetails } from "@/firebase/fetchUserDetails";
+import { auth } from "@/firebase/clientApp";
 import PageContentLayout from "@/layouts/PageContentLayout";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Home() {
-  const { userDetails } = fetchUserDetails();
+  const [user] = useAuthState(auth)
+  
   return (
     <PageContentLayout pageName="Home">
       <div className="flex flex-col bg-card p-12 items-center rounded-lg">

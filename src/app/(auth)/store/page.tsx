@@ -1,26 +1,44 @@
 "use client";
 
 import StoreInputs from "@/components/auth/StoreInputs";
-import React, { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
+import { auth } from "@/firebase/clientApp";
+import React, { useEffect, useState } from "react";
+import { useUpdateProfile } from "react-firebase-hooks/auth";
 
 type pageProps = {};
 
 const page: React.FC<pageProps> = () => {
   const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [updateProfile, updating, error] = useUpdateProfile(auth);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const success = await updateProfile({
+        displayName: name,
+        photoURL: `https://robohash.org/${name}set=set4&bgset=bg1`,
+      });
 
+      if (success) {
+        toast({ title: "Details updated successfully" });
+      }
+    } catch (error) {
+      toast({ title: "Something went wrong", variant: "destructive" });
+      console.log(error);
+    }
+  };
+  
   return (
     <StoreInputs
       name={name}
       handleChange={handleChange}
       onSubmit={handleSubmit}
-      loading={loading}
+      loading={updating}
     />
   );
 };

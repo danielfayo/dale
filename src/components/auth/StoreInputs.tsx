@@ -38,7 +38,7 @@ const StoreInputs: React.FC<StoreInputsProps> = ({name, handleChange, onSubmit, 
               required
             />
           </div>
-          <Button disabled={loading} type="submit" className="mt-4 mb-4 w-full">{loading ? (<Loader2 size={16}/>) : "Continue"}</Button>
+          <Button disabled={loading} type="submit" className="mt-4 mb-4 w-full">{loading ? (<Loader2 size={16} className="animate-spin"/>) : "Continue"}</Button>
         </form>
       </div>
     </>
