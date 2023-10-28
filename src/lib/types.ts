@@ -28,7 +28,7 @@ export type Product = {
   creatorDisplayName: string | null | undefined;
   productName: string;
   productDesc: string;
-  productPrice: string;
+  productPrice: number;
   productCategory: string;
   productCoverURL: null | string;
   productContentURLs: string[];
@@ -39,5 +39,5 @@ export type ProductSnippet = {
   productName: string;
   productCoverURL: null | string;
   sales: number;
-  productPrice: string
+  productPrice: number
 };
