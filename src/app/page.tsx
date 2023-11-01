@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchUserDetails } from "@/firebase/fetchUserDetails";
+import { fetchUserDetails } from "@/firebase/useFetchUserDetails";
 import PageContentLayout from "@/layouts/PageContentLayout";
 
 export default function Home() {

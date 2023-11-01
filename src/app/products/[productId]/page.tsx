@@ -2,7 +2,7 @@
 
 import PageContentLayout from "@/layouts/PageContentLayout";
 import React from "react";
-import getProductData from "./getProductData";
+import getProductData from "../../../hooks/useGetProductData";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { MoreVertical } from "lucide-react";

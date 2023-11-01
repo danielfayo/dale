@@ -1,4 +1,4 @@
-import { fetchUserDetails } from "@/firebase/fetchUserDetails";
+import { fetchUserDetails } from "@/firebase/useFetchUserDetails";
 import { User } from "@/lib/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 

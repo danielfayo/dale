@@ -9,9 +9,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
-type pageProps = {};
+type PageProps = {};
 
-const page: React.FC<pageProps> = () => {
+const Page: React.FC<PageProps> = () => {
   const [createUserWithEmailAndPassword, userCred, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
   const router = useRouter()
@@ -65,4 +65,4 @@ const page: React.FC<pageProps> = () => {
     />
   );
 };
-export default page;
+export default Page;

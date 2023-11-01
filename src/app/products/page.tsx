@@ -10,9 +10,9 @@ import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-type pageProps = {};
+type PageProps = {};
 
-const page: React.FC<pageProps> = () => {
+const Page: React.FC<PageProps> = () => {
   const { productSnippets } = useFetchProducts();
   const router = useRouter()
 
@@ -48,4 +48,4 @@ const page: React.FC<pageProps> = () => {
     </PageContentLayout>
   );
 };
-export default page;
+export default Page;

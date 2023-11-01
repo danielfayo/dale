@@ -6,9 +6,9 @@ import { auth } from "@/firebase/clientApp";
 import React, { useEffect, useState } from "react";
 import { useUpdateProfile } from "react-firebase-hooks/auth";
 
-type pageProps = {};
+type PageProps = {};
 
-const page: React.FC<pageProps> = () => {
+const Page: React.FC<PageProps> = () => {
   const [name, setName] = useState("");
   const [updateProfile, updating, error] = useUpdateProfile(auth);
 
@@ -42,4 +42,4 @@ const page: React.FC<pageProps> = () => {
     />
   );
 };
-export default page;
+export default Page;

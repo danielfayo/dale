@@ -18,9 +18,9 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-type pageProps = {};
+type PageProps = {};
 
-const page: React.FC<pageProps> = () => {
+const Page: React.FC<PageProps> = () => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [coverPhoto, setCoverPhoto] = useState<string>(); //cover photo
@@ -224,4 +224,4 @@ const page: React.FC<pageProps> = () => {
     />
   );
 };
-export default page;
+export default Page;

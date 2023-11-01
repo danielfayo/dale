@@ -46,7 +46,7 @@ export default function Home() {
             height={200}
           />
           <span className="text-2xl pb-4 text-center text-gray-400">
-            You don't have any products yet
+            You don&apos;t have any products yet
           </span>
           <Link className={`${buttonVariants()}`} href={"/createproduct"}>
             Add a new product

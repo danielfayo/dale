@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 
-type pageProps = {};
+type PageProps = {};
 
-const page: React.FC<pageProps> = () => {
+const Page: React.FC<PageProps> = () => {
     const router = useRouter()
   const [signinForm, setSigninForm] = useState({
     email: "",
@@ -54,4 +54,4 @@ const page: React.FC<pageProps> = () => {
     </>
   );
 };
-export default page;
+export default Page;
