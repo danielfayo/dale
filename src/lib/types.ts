@@ -24,11 +24,12 @@ export type ProductText = {
 };
 
 export type Product = {
+  productId: string;
   creatorId: string | undefined;
   creatorDisplayName: string | null | undefined;
   productName: string;
   productDesc: string;
-  productPrice: number;
+  productPrice: number | string;
   productCategory: string;
   productCoverURL: null | string;
   productContentURLs: string[];
@@ -36,8 +37,10 @@ export type Product = {
 };
 
 export type ProductSnippet = {
+  productId: string;
   productName: string;
+  productCategory: string;
   productCoverURL: null | string;
   sales: number;
-  productPrice: number
+  productPrice: number;
 };

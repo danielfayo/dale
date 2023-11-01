@@ -2,7 +2,8 @@
 const nextConfig = {
     images: {
         remotePatterns: [
-            {protocol: "https", hostname: "robohash.org",}
+            {protocol: "https", hostname: "robohash.org",},
+            {protocol: "https", hostname: "firebasestorage.googleapis.com",}
         ]
     }
 }

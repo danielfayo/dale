@@ -13,6 +13,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -140,6 +141,7 @@ const page: React.FC<pageProps> = () => {
     setLoading(true);
 
     const newProduct: Product = {
+      productId: nanoid(),
       creatorId: user?.uid,
       creatorDisplayName: user?.displayName,
       productName: productTexts.name,
@@ -178,10 +180,12 @@ const page: React.FC<pageProps> = () => {
       await updateDoc(productDocRef, { productContentURLs: links });
 
       const newProductSnippet: ProductSnippet = {
+        productId: newProduct.productId,
         productName: newProduct.productName,
+        productCategory: newProduct.productCategory,
         productCoverURL: downloadURL,
         sales: newProduct.sales,
-        productPrice: newProduct.productPrice
+        productPrice: newProduct.productPrice as number,
       };
 
       await setDoc(

@@ -17,7 +17,7 @@ type TopNavProps = {
 const TopNav: React.FC<TopNavProps> = ({ pageName }) => {
   return (
     <nav className="flex lg:hidden bg-card h-16 justify-between items-center px-4">
-      <h1>{pageName}</h1>
+      <h1 className="truncate mr-4">{pageName}</h1>
       <Sheet>
         <SheetTrigger className="lg:hidden cursor-pointer">
           <Menu />
