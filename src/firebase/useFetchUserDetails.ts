@@ -9,7 +9,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDispatch } from "react-redux";
 import { auth, firestore } from "./clientApp";
 
-export const fetchUserDetails = () => {
+export const useFetchUserDetails = () => {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

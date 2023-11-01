@@ -6,7 +6,7 @@ import { Product } from "@/lib/types";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 
-const getProductData = (collectionId: string) => {
+const useGetProductData = (collectionId: string) => {
   const [result, setResult] = useState<Product>();
   const [loading, setLoading] = useState(false);
 
@@ -32,4 +32,4 @@ const getProductData = (collectionId: string) => {
 
   return {result, loading};
 };
-export default getProductData;
+export default useGetProductData;

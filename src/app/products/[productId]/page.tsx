@@ -2,7 +2,7 @@
 
 import PageContentLayout from "@/layouts/PageContentLayout";
 import React from "react";
-import getProductData from "../../../hooks/useGetProductData";
+import useGetProductData from "../../../hooks/useGetProductData";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { MoreVertical } from "lucide-react";
@@ -20,7 +20,7 @@ type pageProps = {
 };
 
 const page: React.FC<pageProps> = ({ params }) => {
-  const { result } = getProductData(params.productId);
+  const { result } = useGetProductData(params.productId);
 
   return (
     <PageContentLayout pageName={result?.productName as string}>
