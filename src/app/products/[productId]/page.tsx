@@ -19,7 +19,7 @@ type pageProps = {
   params: { productId: string };
 };
 
-const page: React.FC<pageProps> = ({ params }) => {
+const Page: React.FC<pageProps> = ({ params }) => {
   const { result } = useGetProductData(params.productId);
 
   return (
@@ -53,4 +53,4 @@ const page: React.FC<pageProps> = ({ params }) => {
     </PageContentLayout>
   );
 };
-export default page;
+export default Page;
