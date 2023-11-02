@@ -86,7 +86,7 @@ const CreateProduct: React.FC<CreateProductProps> = ({
           <span>Cover image</span>
           {coverPhoto ? (
             <>
-              <div className="w-[40rem] aspect-square relative mt-4">
+              <div className="w-fill max-h-[608px] aspect-square relative mt-4">
                 <Image
                   src={coverPhoto}
                   alt="cover photo"

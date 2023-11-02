@@ -154,30 +154,36 @@ const Page: React.FC<PageProps> = () => {
     };
 
     try {
-      const productDocRef = await addDoc(
-        collection(firestore, "products"),
-        newProduct
-      );
+      // const productDocRef = await addDoc(
+      //   collection(firestore, "products"),
+      //   newProduct
+      // );
+      const productDocRef = doc(firestore, "products", newProduct.productId)
+      setDoc(doc (firestore, "products", newProduct.productId), newProduct)
+
+      // await updateDoc(productDocRef, newProduct);
 
       const coverImageRef = ref(
         storage,
-        `productCovers/${productDocRef.id}/image`
+        `productCovers/${newProduct.productId}/image`
       );
       await uploadString(coverImageRef, coverPhoto!, "data_url");
       const downloadURL = await getDownloadURL(coverImageRef);
-      await updateDoc(productDocRef, { productCoverURL: downloadURL });
+      // await updateDoc(productDocRef, { productCoverURL: downloadURL });
+      await setDoc(productDocRef, { productCoverURL: downloadURL }, {merge: true});
 
       const links = [];
       for (let i = 0; i < contentFiles.length; i++) {
         const imageRef = ref(
           storage,
-          `/contentFiles/${productDocRef.id}/${contentFiles[i].id}`
+          `/contentFiles/${newProduct.productId}/${contentFiles[i].id}`
         );
         await uploadString(imageRef, contentFiles[i].file, "data_url");
         const downloadURL = await getDownloadURL(imageRef);
         links.push(downloadURL);
       }
-      await updateDoc(productDocRef, { productContentURLs: links });
+      // await updateDoc(productDocRef, { productContentURLs: links });
+      await setDoc(productDocRef, { productContentURLs: links }, {merge: true});
 
       const newProductSnippet: ProductSnippet = {
         productId: newProduct.productId,
@@ -189,16 +195,16 @@ const Page: React.FC<PageProps> = () => {
       };
 
       await setDoc(
-        doc(firestore, `users/${user?.uid}/productSnippets`, productDocRef.id),
+        doc(firestore, `users/${user?.uid}/productSnippets`, newProduct.productId),
         newProductSnippet
       );
       toast({ title: "Product created successfully" });
+      router.push("/products");
     } catch (error) {
       toast({ title: "Something went wrong", variant: "destructive" });
       console.log(error);
     }
     setLoading(false);
-    router.push("/products");
   };
 
   return (

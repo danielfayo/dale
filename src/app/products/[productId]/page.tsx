@@ -14,13 +14,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 type pageProps = {
   params: { productId: string };
 };
 
 const Page: React.FC<pageProps> = ({ params }) => {
+  const router = useRouter()
   const { result } = useGetProductData(params.productId);
+
+  const handleEditButton = () => {
+    router.push(`/editproduct/${params.productId}`)
+  }
 
   return (
     <PageContentLayout pageName={result?.productName as string}>
@@ -32,7 +38,7 @@ const Page: React.FC<pageProps> = ({ params }) => {
           <DropdownMenuContent className="border-none">
             <DropdownMenuLabel>Options</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit Product</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEditButton}>Edit Product</DropdownMenuItem>
             <DropdownMenuItem className="text-red-500">Delete Product</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
