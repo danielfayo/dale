@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 export type User = {
   email?: string | null;
   uid?: string;
@@ -44,3 +46,11 @@ export type ProductSnippet = {
   sales: number;
   productPrice: number;
 };
+
+export type TransactionType = {
+  transactionId: string
+  time: FieldValue;
+  productName: string | undefined;
+  productPrice: string | number | undefined;
+  customerEmail: string;
+}

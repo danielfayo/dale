@@ -227,11 +227,13 @@ const CreateProduct: React.FC<CreateProductProps> = ({
           <Input
             id="price"
             placeholder="e.g 5000"
+            type="number"
             className="pl-8 appearance-none"
             value={productTexts.price}
             onChange={handleProductTextChange}
           />
           <span className="absolute bottom-1.5 ml-3">₦</span>
+          <div className="w-4 h-4 bg-background absolute bottom-[11px] right-3"/>
         </div>
         {priceError && (
             <span className="text-red-400 text-xs">{priceError}</span>
