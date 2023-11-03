@@ -169,21 +169,19 @@ const Page: React.FC<PageProps> = () => {
       );
       await uploadString(coverImageRef, coverPhoto!, "data_url");
       const downloadURL = await getDownloadURL(coverImageRef);
-      // await updateDoc(productDocRef, { productCoverURL: downloadURL });
-      await setDoc(productDocRef, { productCoverURL: downloadURL }, {merge: true});
+      await updateDoc(productDocRef, { productCoverURL: downloadURL });
 
       const links = [];
       for (let i = 0; i < contentFiles.length; i++) {
         const imageRef = ref(
           storage,
-          `/contentFiles/${newProduct.productId}/${contentFiles[i].id}`
+          `/contentFiles/${newProduct.productId}/${i}`
         );
         await uploadString(imageRef, contentFiles[i].file, "data_url");
         const downloadURL = await getDownloadURL(imageRef);
         links.push(downloadURL);
       }
-      // await updateDoc(productDocRef, { productContentURLs: links });
-      await setDoc(productDocRef, { productContentURLs: links }, {merge: true});
+      await updateDoc(productDocRef, { productContentURLs: links });
 
       const newProductSnippet: ProductSnippet = {
         productId: newProduct.productId,

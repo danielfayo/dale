@@ -8,14 +8,23 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Categories } from "@/components/createProduct/categories";
-import { Product, categoriesType } from "@/lib/types";
+import { Product, ProductSnippet, categoriesType } from "@/lib/types";
+import { auth, firestore, storage } from "@/firebase/clientApp";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { toast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type PageProps = {
   params: { productId: string };
 };
 
 const Page: React.FC<PageProps> = ({ params }) => {
-  const { result } = useGetProductData(params.productId);
+    const { result } = useGetProductData(params.productId);
+  const [user] = useAuthState(auth);
+  const router = useRouter()
 
   const selectedCoverRef = useRef<HTMLInputElement>(null);
   const [productName, setProductName] = useState("");
@@ -26,6 +35,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const [coverPhoto, setCoverPhoto] = useState<string>();
 
   const [categories, setCategories] = useState<categoriesType[]>(Categories);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const newCat: categoriesType[] = categories.map((each) =>
@@ -37,7 +47,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
     setProductName(result?.productName!);
     setProductDesc(result?.productDesc!);
     setProductCategory(result?.productCategory!);
-    setProductPrice(result?.productPrice as string)
+    setProductPrice(result?.productPrice as string);
   }, [result]);
 
   const handleSelectCategory = (value: string) => {
@@ -62,9 +72,10 @@ const Page: React.FC<PageProps> = ({ params }) => {
     };
   };
 
-  const handleUpdateProduct = () => {
-
-    const newProduct: Product = {
+  const handleUpdateProduct = async () => {
+    setLoading(true)
+    try {
+      const newProduct: Product = {
         productId: result?.productId!,
         creatorId: result?.creatorId!,
         creatorDisplayName: result?.creatorDisplayName!,
@@ -74,13 +85,48 @@ const Page: React.FC<PageProps> = ({ params }) => {
         productCategory: productCategory,
         productContentURLs: result?.productContentURLs!,
         productCoverURL: result?.productCoverURL!,
-        sales: result?.sales!
-    }
+        sales: result?.sales!,
+      };
 
-    if (coverPhoto){
-        
+      const productDocRef = doc(firestore, "products", newProduct.productId);
+      setDoc(doc(firestore, "products", newProduct.productId), newProduct);
+
+      const newProductSnippet: ProductSnippet = {
+        productId: newProduct.productId,
+        productName: newProduct.productName,
+        productCategory: newProduct.productCategory,
+        productCoverURL: newProduct.productCoverURL,
+        sales: newProduct.sales,
+        productPrice: newProduct.productPrice as number,
+      };
+
+      const productSnippetsDocRef = doc(
+        firestore,
+        `users/${user?.uid}/productSnippets`,
+        newProduct.productId
+      );
+      await setDoc(productSnippetsDocRef, newProductSnippet);
+
+      if (coverPhoto) {
+        const coverImageRef = ref(
+          storage,
+          `productCovers/${newProduct.productId}/image`
+        );
+        await uploadString(coverImageRef, coverPhoto!, "data_url");
+        const downloadURL = await getDownloadURL(coverImageRef);
+        await updateDoc(productDocRef, { productCoverURL: downloadURL });
+        await updateDoc(productSnippetsDocRef, {
+          productCoverURL: downloadURL,
+        });
+      }
+      toast({ title: "Product updated successfully" });
+      router.push(`/products/${newProduct.productId}`)
+    } catch (error) {
+      toast({ title: "Something went wrong", variant: "destructive" });
+      console.log(error);
     }
-  }
+    setLoading(false)
+  };
 
   return (
     <PageContentLayout pageName="Edit Product">
@@ -182,11 +228,11 @@ const Page: React.FC<PageProps> = ({ params }) => {
         <span className="absolute bottom-1.5 ml-3">₦</span>
       </div>
       <Button
-        //   disabled={loading}
-        //   onClick={handleCreateProduct}
+          disabled={loading}
+          onClick={handleUpdateProduct}
         className="mt-8 md:mr-auto mb-8"
       >
-        "Update product"
+        {loading ? <Loader2 size={16} className="animate-spin" /> : "Update product"}
       </Button>
     </PageContentLayout>
   );
