@@ -27,14 +27,22 @@ export default function Home() {
     totalSales += productSnippets[i].sales;
   }
 
+  let totalRevenue = 0
+  for (let i = 0; i < productSnippets.length; i++){
+    const productRevenue = productSnippets[i].productPrice * productSnippets[i].sales
+    totalRevenue += productRevenue;
+  }
+
   return (
     <PageContentLayout pageName="Home">
       <div className="flex gap-4 mb-8">
-        <div className="w-full bg-card rounded-lg p-4 h-40">
+        <div className="w-full bg-card rounded-lg p-4 h-40 flex flex-col justify-between">
           <span>Total Revenue</span>
+          <span className="text-4xl font-semibold mb-4">₦ {totalRevenue}</span>
         </div>
-        <div className="w-full bg-card rounded-lg p-4 h-40">
+        <div className="w-full bg-card rounded-lg p-4 h-40 flex flex-col justify-between">
           <span>Total Sales</span>
+          <span className="text-4xl font-semibold mb-4">{totalSales}</span>
         </div>
       </div>
       {!productSnippets.length ? (
@@ -85,7 +93,7 @@ export default function Home() {
                 <TableCell></TableCell>
                 <TableCell>Total</TableCell>
                 <TableCell>{totalSales}</TableCell>
-                <TableCell>0</TableCell>
+                <TableCell>{totalRevenue}</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableBody>
@@ -94,10 +102,10 @@ export default function Home() {
         </ScrollArea>
       )}
 
-      <div className="flex flex-col mt-6">
+      <div className="flex flex-col my-6">
         <span className="text-xl">Activites</span>
         <div className="bg-card p-4 mt-2 rounded-lg flex justify-center">
-          <span className="text-gray-400">You have no activites yet</span>
+          <span className="opacity-80">You have no activites yet</span>
         </div>
       </div>
     </PageContentLayout>

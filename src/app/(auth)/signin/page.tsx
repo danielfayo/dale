@@ -4,22 +4,28 @@ import SigninInputs from "@/components/auth/SigninInputs";
 import { toast } from "@/components/ui/use-toast";
 import { auth } from "@/firebase/clientApp";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import React, { useEffect, useState } from "react";
+import { useAuthState, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 type PageProps = {};
 
 const Page: React.FC<PageProps> = () => {
+  const [user] = useAuthState(auth)
     const router = useRouter()
   const [signinForm, setSigninForm] = useState({
     email: "",
     password: "",
   });
 
+  useEffect(()=> {
+    if (!user?.uid){
+      router.push("/overview")
+    }
+  },[user])
+
   const [signInWithEmailAndPassword, userCred, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
-  const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState<string>();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +38,6 @@ const Page: React.FC<PageProps> = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
     try {
       signInWithEmailAndPassword(signinForm.email, signinForm.password);
       router.push("/overview")
@@ -40,7 +45,6 @@ const Page: React.FC<PageProps> = () => {
       console.log(error);
       toast({ title: "Something went wrong", variant: "destructive" });
     }
-    setIsLoading(false);
   };
 
   return (
@@ -49,7 +53,7 @@ const Page: React.FC<PageProps> = () => {
         handleChange={handleChange}
         onSubmit={handleSubmit}
         signinForm={signinForm}
-        loading={isLoading}
+        loading={loading}
       />
     </>
   );

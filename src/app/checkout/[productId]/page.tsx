@@ -18,6 +18,7 @@ import { firestore } from "@/firebase/clientApp";
 import { TransactionType } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { nanoid } from "nanoid";
+import { Loader2 } from "lucide-react";
 
 type PageProps = {
   params: { productId: string };
@@ -38,11 +39,12 @@ const Page: React.FC<PageProps> = ({ params }) => {
       const batch = writeBatch(firestore);
       const productDocRef = doc(firestore, "products", `${result?.productId}`);
       batch.update(productDocRef, { sales: increment(1) });
-
-      const transactionDocRef = doc(
+      const productSnippetDocRef = doc(
         firestore,
-        `users/${result?.creatorId}/transactions`
+        `users/${result?.creatorId}/productSnippets/${result?.productId}`
       );
+      batch.update(productSnippetDocRef, { sales: increment(1) });
+
       const newTransaction: TransactionType = {
         transactionId: nanoid(),
         time: serverTimestamp(),
@@ -50,9 +52,14 @@ const Page: React.FC<PageProps> = ({ params }) => {
         productPrice: result?.productPrice,
         customerEmail: email,
       };
+      const transactionDocRef = doc(
+        firestore,
+        `users/${result?.creatorId}/transactions/${newTransaction.transactionId}`
+      );
       batch.set(transactionDocRef, newTransaction);
 
-      await batch.commit;
+      await batch.commit();
+      toast({ title: "Purchase Successfull" });
     } catch (error) {
       console.log(error);
       toast({ title: "Something went wrong", variant: "destructive" });
@@ -113,7 +120,13 @@ const Page: React.FC<PageProps> = ({ params }) => {
             <Input placeholder="eg. 123" type="number" />
             <div className="w-4 h-4 bg-background absolute bottom-[11px] right-3" />
           </div>
-          <Button className="w-full">Purchase</Button>
+          <Button onClick={handlePurchase} className="w-full">
+            {loading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              "Purchase"
+            )}
+          </Button>
         </div>
       </div>
     </div>
