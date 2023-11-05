@@ -2,7 +2,7 @@ import {
     Body,
     Container,
     Head,
-    Heading,
+    // Heading,
     Html,
     Img,
     Link,
@@ -11,7 +11,7 @@ import {
   } from '@react-email/components';
   import * as React from 'react';
   
-  interface NotionMagicLinkEmailProps {
+  export interface NotionMagicLinkEmailProps {
     loginCode?: string;
   }
   
@@ -27,7 +27,7 @@ import {
       <Preview>Log in with this magic link</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Welcome</Heading>
+          <Text style={h1}>Welcome</Text>
           <Link
             href="https://notion.so"
             target="_blank"
