@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export type User = {
   email?: string | null;
@@ -49,7 +49,7 @@ export type ProductSnippet = {
 
 export type TransactionType = {
   transactionId: string
-  time: FieldValue;
+  time: Timestamp;
   productName: string | undefined;
   productPrice: string | number | undefined;
   customerEmail: string;

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
+  Timestamp,
   doc,
   increment,
   serverTimestamp,
@@ -47,7 +48,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
 
       const newTransaction: TransactionType = {
         transactionId: nanoid(),
-        time: serverTimestamp(),
+        time: serverTimestamp() as Timestamp,
         productName: result?.productName,
         productPrice: result?.productPrice,
         customerEmail: email,

@@ -12,12 +12,18 @@ import Links from "./Links";
 
 type TopNavProps = {
   pageName: string;
+  other?: React.ReactNode
 };
 
-const TopNav: React.FC<TopNavProps> = ({ pageName }) => {
+const TopNav: React.FC<TopNavProps> = ({ pageName, other }) => {
   return (
     <nav className="flex lg:hidden bg-card h-16 justify-between items-center px-4">
       <h1 className="truncate mr-4">{pageName}</h1>
+      <div className="flex items-center">
+        <div className="mt-auto absolute top-[20px] right-10">
+
+      {other}
+        </div>
       <Sheet>
         <SheetTrigger className="lg:hidden cursor-pointer">
           <Menu />
@@ -32,6 +38,7 @@ const TopNav: React.FC<TopNavProps> = ({ pageName }) => {
           <Links/>
         </SheetContent>
       </Sheet>
+      </div>
     </nav>
   );
 };

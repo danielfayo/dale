@@ -78,8 +78,9 @@ const Page: React.FC<pageProps> = ({ params }) => {
   };
 
   return (
-    <PageContentLayout pageName={result?.productName as string}>
-      <div className="flex">
+    <PageContentLayout
+      pageName={result?.productName as string}
+      other={
         <DropdownMenu>
           <DropdownMenuTrigger className="mb-4 ml-auto">
             <MoreVertical />
@@ -120,7 +121,11 @@ const Page: React.FC<pageProps> = ({ params }) => {
             </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      }
+    >
+      {/* <div className="flex">
+        
+      </div> */}
 
       <div className="mb-8">
         <div className="relative w-full aspect-square max-h-[608px]">

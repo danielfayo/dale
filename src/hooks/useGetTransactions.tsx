@@ -1,35 +1,36 @@
 "use client";
 
 import { toast } from "@/components/ui/use-toast";
-import { firestore } from "@/firebase/clientApp";
-import { Product } from "@/lib/types";
+import { auth, firestore } from "@/firebase/clientApp";
+import { Product, TransactionType } from "@/lib/types";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-const useGetProductData = (collectionId: string) => {
-  const [result, setResult] = useState<Product>();
-  const [loading, setLoading] = useState(false);
+const useGetTransactionData = () => {
+  const [result, setResult] = useState<TransactionType[]>();
+  const [loadingTransactions, setLoadingTransactions] = useState(false);
+  const [user] = useAuthState(auth)
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [user])
 
   const getData = async () => {
-    setLoading(true);
+    setLoadingTransactions(true);
     try {
       const q = query(
-        collection(firestore, "products"),
-        where("productId", "==", `${collectionId}`)
+        collection(firestore, `users/${user?.uid}/transactions`),
       );
       const snapShot = await getDocs(q)
       const snip = snapShot.docs.map(doc => ({...doc.data()}))
-      setResult(snip[0] as Product)
+      setResult(snip as TransactionType[])
     } catch (error) {
       toast({ title: "Something went wrong", variant: "destructive" });
     }
-    setLoading(false);
+    setLoadingTransactions(false);
   };
 
-  return {result, loading};
+  return {result, loadingTransactions};
 };
-export default useGetProductData;
+export default useGetTransactionData;
