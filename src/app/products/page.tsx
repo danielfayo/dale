@@ -14,17 +14,40 @@ type PageProps = {};
 
 const Page: React.FC<PageProps> = () => {
   const { productSnippets } = useFetchProducts();
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <PageContentLayout pageName="Products">
-      <div className="flex ">
-        <Link href={"/createproduct"} className={`mb-4 ml-auto hidden md:flex ${buttonVariants({variant: "outline"})}`}><PlusCircle size={18} className="mr-2" />Create new product</Link>
-        <Link href={"/createproduct"} className={`mb-4 ml-auto md:hidden ${buttonVariants({variant: "outline"})}`}><PlusCircle size={18} /></Link>
-      </div>
+    <PageContentLayout
+      pageName="Products"
+      other={
+        <div className="flex ">
+          <Link
+            href={"/createproduct"}
+            className={`mr-4 hidden md:flex ${buttonVariants({
+              variant: "outline",
+            })}`}
+          >
+            <PlusCircle size={18} className="mr-2" />
+            Create new product
+          </Link>
+          <Link
+            href={"/createproduct"}
+            className={`mr-2 md:hidden ${buttonVariants({
+              variant: "outline",
+            })}`}
+          >
+            <PlusCircle size={18} />
+          </Link>
+        </div>
+      }
+    >
       <div className="flex flex-col gap-y-4 gap-x-8 sm:grid sm:grid-cols-2 sm:grid-rows-2">
         {productSnippets.map((prod, index) => (
-          <Link href={`/products/${prod.productId}`} key={index} className="w-full cursor-pointer group">
+          <Link
+            href={`/products/${prod.productId}`}
+            key={index}
+            className="w-full cursor-pointer group"
+          >
             <div className="relative w-full h-60">
               <Image
                 src={prod.productCoverURL!}

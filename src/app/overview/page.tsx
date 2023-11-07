@@ -108,30 +108,30 @@ export default function Home() {
         <span className="text-xl">Activites</span>
         {result?.length! > 0 ? (
           <div className="flex flex-col gap-4 mt-4">
-          {result?.map((res) => (
-            <div className="flex flex-col gap-" key={res.transactionId}>
-              <div className="flex items-center w-full justify-between">
-                <div className="flex items-center gap-2">
-                <Coins size={16} className="text-primary"/>
-                <span className="opacity-80">New sale</span>
+            {result?.map((res) => (
+              <div className="flex flex-col gap-" key={res.transactionId}>
+                <div className="flex items-center w-full justify-between">
+                  <div className="flex items-center gap-2">
+                    <Coins size={16} className="text-primary" />
+                    <span className="opacity-80 text-sm font-normal">
+                      New sale
+                    </span>
+                  </div>
+                  <span className="opacity-80 text-sm">
+                    {moment(new Date(res.time.seconds * 1000)).format(
+                      "DD MM YYYY"
+                    )}
+                  </span>
                 </div>
-                <span className="opacity-80">
-                  {moment(new Date(res.time.seconds * 1000)).format(
-                    "DD MM YYYY"
-                  )}
-                </span>
+                <span className="">{res.productName}</span>
               </div>
-              <span className="underline">{res.productName}</span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
         ) : (
           <div className="bg-card p-4 mt-2 rounded-lg flex justify-center">
-          <span className="opacity-80">You have no activites yet</span>
-        </div>
+            <span className="opacity-80">You have no activites yet</span>
+          </div>
         )}
-        
-        
       </div>
     </PageContentLayout>
   );

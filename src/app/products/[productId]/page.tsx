@@ -82,7 +82,7 @@ const Page: React.FC<pageProps> = ({ params }) => {
       pageName={result?.productName as string}
       other={
         <DropdownMenu>
-          <DropdownMenuTrigger className="mb-4 ml-auto">
+          <DropdownMenuTrigger className="">
             <MoreVertical />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="border-none">

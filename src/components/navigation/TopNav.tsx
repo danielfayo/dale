@@ -20,7 +20,7 @@ const TopNav: React.FC<TopNavProps> = ({ pageName, other }) => {
     <nav className="flex lg:hidden bg-card h-16 justify-between items-center px-4">
       <h1 className="truncate mr-4">{pageName}</h1>
       <div className="flex items-center">
-        <div className="mt-auto absolute top-[20px] right-10">
+        <div className=" flex items-center">
 
       {other}
         </div>
