@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         ) : (
           <div className="space-x-2">
             <Link
-              href={"/registar"}
+              href={"/register"}
               className={`${buttonVariants({ variant: "outline" })}`}
             >
               Registar
