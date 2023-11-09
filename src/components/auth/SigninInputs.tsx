@@ -47,7 +47,7 @@ const SigninInputs: React.FC<SigninInputsProps> = ({signinForm, handleChange, on
               required
             />
           </div>
-          <Button disabled={loading} type="submit" className="mt-8 mb-4 w-full">{loading ? (<Loader2 size={16}/>) : "Sign In"}</Button>
+          <Button disabled={loading} type="submit" className="mt-8 mb-4 w-full">{loading ? (<Loader2 className="animate-spin" size={16}/>) : "Sign In"}</Button>
         </form>
 
         <span className="text-sm text-gray-400">

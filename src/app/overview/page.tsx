@@ -20,11 +20,12 @@ import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
 import moment from "moment";
 import { Coins } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
   const [user] = useAuthState(auth);
-  const { productSnippets } = useFetchProducts();
-  const { result } = useGetTransactionData();
+  const { productSnippets, loading } = useFetchProducts();
+  const { result, loadingTransactions } = useGetTransactionData();
 
   let totalSales = 0;
   let totalRevenue = 0;
@@ -40,14 +41,30 @@ export default function Home() {
       <div className="flex gap-4 mb-8">
         <div className="w-full bg-card rounded-lg p-4 h-40 flex flex-col justify-between">
           <span>Total Revenue</span>
-          <span className="text-4xl font-semibold mb-4">₦ {totalRevenue}</span>
+          {loading ? (
+            <Skeleton className="w-[100px] h-[20px] rounded-full mb-4" />
+          ) : (
+            <span className="text-4xl font-semibold mb-4">
+              ₦ {totalRevenue}
+            </span>
+          )}
         </div>
         <div className="w-full bg-card rounded-lg p-4 h-40 flex flex-col justify-between">
           <span>Total Sales</span>
-          <span className="text-4xl font-semibold mb-4">{totalSales}</span>
+          {loading ? (
+            <Skeleton className="w-[100px] h-[20px] rounded-full mb-4" />
+          ) : (
+            <span className="text-4xl font-semibold mb-4">{totalSales}</span>
+          )}
         </div>
       </div>
-      {!productSnippets.length ? (
+      {loading ? (
+        <div className="space-y-2">
+          {[1, 2, 3, 4, 5].map((each) => (
+            <Skeleton key={each} className="w-full h-[32px] md:h-[64px]" />
+          ))}
+        </div>
+      ) : !productSnippets.length ? (
         <div className="flex flex-col bg-card p-12 items-center rounded-lg">
           {/* <Image
             alt="empty"
@@ -56,10 +73,10 @@ export default function Home() {
             height={200}
           /> */}
           <span className="text-2xl pb-4 text-center opacity-80">
-            You don&apos;t have any products yet
+            You no products yet
           </span>
           <Link className={`${buttonVariants()}`} href={"/createproduct"}>
-            Add a new product
+            Create a new product
           </Link>
         </div>
       ) : (
@@ -106,7 +123,19 @@ export default function Home() {
 
       <div className="flex flex-col my-6">
         <span className="text-xl">Activites</span>
-        {result?.length! > 0 ? (
+        {loadingTransactions ? (
+          <div className="space-y-4 mt-4">
+            {[1, 2, 3, 4, 5].map((each) => (
+              <div key={each} className="space-y-2">
+                <div className="flex items-center w-full justify-between">
+                  <Skeleton className="w-[100px] h-[20px]" />
+                  <Skeleton className="w-[100px] h-[20px]" />
+                </div>
+                <Skeleton className="w-full h-[20px]" />
+              </div>
+            ))}
+          </div>
+        ) : result?.length! > 0 ? (
           <div className="flex flex-col gap-4 mt-4">
             {result?.map((res) => (
               <div className="flex flex-col gap-" key={res.transactionId}>

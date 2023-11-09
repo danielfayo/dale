@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 
 const useFetchProducts = () => {
   const [user] = useAuthState(auth);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const [result, setResult] = useState<any>();
 
@@ -27,7 +27,7 @@ const useFetchProducts = () => {
   }, [user]);
 
   const getData = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const productSnippetsRef = collection(firestore, `users/${user?.uid}/productSnippets`);
       const snippets = query(
@@ -42,6 +42,6 @@ const useFetchProducts = () => {
     setLoading(false);
   };
 
-  return { productSnippets };
+  return { productSnippets, loading };
 };
 export default useFetchProducts;

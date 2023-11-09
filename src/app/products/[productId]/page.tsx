@@ -32,6 +32,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "@/components/ui/use-toast";
 import { buttonVariants } from "@/components/ui/button";
 import { deleteObject, ref } from "firebase/storage";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type pageProps = {
   params: { productId: string };
@@ -39,7 +40,7 @@ type pageProps = {
 
 const Page: React.FC<pageProps> = ({ params }) => {
   const router = useRouter();
-  const { result } = useGetProductData(params.productId);
+  const { result, loadingItem } = useGetProductData(params.productId);
   const [user] = useAuthState(auth);
   // const buttonRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -127,18 +128,42 @@ const Page: React.FC<pageProps> = ({ params }) => {
         
       </div> */}
 
-      <div className="mb-8">
-        <div className="relative w-full aspect-square max-h-[608px]">
-          <Image src={result?.productCoverURL!} alt="" fill objectFit="cover" />
+      {loadingItem ? (
+        <div className="mb-8">
+          <>
+            <Skeleton className="w-full aspect-square max-h-[608px]" />
+            <div className="mt-8 space-y-4">
+              <div className="flex justify-between">
+                <Skeleton className="w-[100px] h-[20px]" />
+                <Skeleton className="w-[100px] h-[20px]" />
+              </div>
+              <div className="space-y-2">
+                {[1, 2, 3, 4, 5].map((each) => (
+                  <Skeleton key={each} className="w-full h-[16px]" />
+                ))}
+              </div>
+            </div>
+          </>
         </div>
-        <div className="mt-8 space-y-4">
-          <div className="flex justify-between">
-            <Badge variant={"secondary"}>{result?.productCategory}</Badge>
-            <span className="text-xl">₦{result?.productPrice}</span>
+      ) : (
+        <div className="mb-8">
+          <div className="relative w-full aspect-square max-h-[608px]">
+            <Image
+              src={result?.productCoverURL!}
+              alt=""
+              fill
+              objectFit="cover"
+            />
           </div>
-          <p className="text-base text-slate-300">{result?.productDesc}</p>
+          <div className="mt-8 space-y-4">
+            <div className="flex justify-between">
+              <Badge variant={"secondary"}>{result?.productCategory}</Badge>
+              <span className="text-xl">₦{result?.productPrice}</span>
+            </div>
+            <p className="text-base text-slate-300">{result?.productDesc}</p>
+          </div>
         </div>
-      </div>
+      )}
     </PageContentLayout>
   );
 };

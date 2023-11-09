@@ -9,7 +9,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 const useGetTransactionData = () => {
   const [result, setResult] = useState<TransactionType[]>();
-  const [loadingTransactions, setLoadingTransactions] = useState(false);
+  const [loadingTransactions, setLoadingTransactions] = useState(true);
   const [user] = useAuthState(auth)
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const useGetTransactionData = () => {
   }, [user])
 
   const getData = async () => {
-    setLoadingTransactions(true);
+    // setLoadingTransactions(true);
     try {
       const q = query(
         collection(firestore, `users/${user?.uid}/transactions`),

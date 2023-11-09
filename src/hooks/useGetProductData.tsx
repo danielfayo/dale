@@ -8,14 +8,14 @@ import React, { useEffect, useState } from "react";
 
 const useGetProductData = (collectionId: string) => {
   const [result, setResult] = useState<Product>();
-  const [loading, setLoading] = useState(false);
+  const [loadingItem, setLoadingItem] = useState(true);
 
   useEffect(() => {
     getData()
   }, [])
 
   const getData = async () => {
-    setLoading(true);
+    // setLoadingItem(true);
     try {
       const q = query(
         collection(firestore, "products"),
@@ -27,9 +27,9 @@ const useGetProductData = (collectionId: string) => {
     } catch (error) {
       toast({ title: "Something went wrong", variant: "destructive" });
     }
-    setLoading(false);
+    setLoadingItem(false);
   };
 
-  return {result, loading};
+  return {result, loadingItem};
 };
 export default useGetProductData;
