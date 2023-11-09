@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userDetailsReducer from './features/userDetailSlice'
 import productSnippetsReducer from "./features/productSnippetsSlice"
+import totalRevenueReducer from "./features/totalRevenueSlice"
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
 export const store = configureStore({
     reducer: {
         userDetails: userDetailsReducer,
-        productSnippets: productSnippetsReducer
+        productSnippets: productSnippetsReducer,
+        totalRevenue: totalRevenueReducer
     }
 })
 

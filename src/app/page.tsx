@@ -1,11 +1,9 @@
-"use client";
-
-import { useFetchUserDetails } from "@/firebase/useFetchUserDetails";
-import PageContentLayout from "@/layouts/PageContentLayout";
+import Navbar from "@/components/landing/Navbar";
 
 export default function Home() {
-  const { userDetails } = useFetchUserDetails();
   return (
-    <>Landing Page</>
+    <>
+    <Navbar/>
+    </>
   );
 }

@@ -12,7 +12,7 @@ type pageProps = {};
 const page: React.FC<pageProps> = () => {
   return (
     <PageContentLayout pageName="Settings">
-      <Tabs defaultValue="profile" className="w-[400px]">
+      <Tabs defaultValue="profile" className="w-full md:max-w-[480px]">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="password">Password</TabsTrigger>
