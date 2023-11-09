@@ -18,7 +18,7 @@ const Page: React.FC<PageProps> = () => {
   });
 
   useEffect(()=> {
-    if (!user?.uid){
+    if (user?.uid){
       router.push("/overview")
     }
   },[user])
