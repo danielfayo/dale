@@ -29,9 +29,8 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const selectedCoverRef = useRef<HTMLInputElement>(null);
   const [productName, setProductName] = useState("");
   const [productDesc, setProductDesc] = useState("");
-  const [productCoverImage, setProductCoverImage] = useState("");
   const [productCategory, setProductCategory] = useState("");
-  const [productPrice, setProductPrice] = useState("");
+  // const [productPrice, setProductPrice] = useState("");
   const [coverPhoto, setCoverPhoto] = useState<string>();
 
   const [categories, setCategories] = useState<categoriesType[]>(Categories);
@@ -47,7 +46,6 @@ const Page: React.FC<PageProps> = ({ params }) => {
     setProductName(result?.productName!);
     setProductDesc(result?.productDesc!);
     setProductCategory(result?.productCategory!);
-    setProductPrice(result?.productPrice as string);
   }, [result]);
 
   const handleSelectCategory = (value: string) => {
@@ -81,7 +79,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
         creatorDisplayName: result?.creatorDisplayName!,
         productName: productName,
         productDesc: productDesc,
-        productPrice: productPrice,
+        productPrice: result?.productPrice!,
         productCategory: productCategory,
         productContentURLs: result?.productContentURLs!,
         productCoverURL: result?.productCoverURL!,
@@ -216,7 +214,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-2 mt-8 relative">
+      {/* <div className="flex flex-col gap-2 mt-8 relative">
         <label htmlFor="price">Price</label>
         <Input
           id="price"
@@ -226,11 +224,11 @@ const Page: React.FC<PageProps> = ({ params }) => {
           onChange={(e) => setProductPrice(e.target.value)}
         />
         <span className="absolute bottom-1.5 ml-3">₦</span>
-      </div>
+      </div> */}
       <Button
           disabled={loading}
           onClick={handleUpdateProduct}
-        className="mt-8 md:mr-auto mb-8"
+        className="mt-8 md:mr-auto mb-8 w-full md:w-fit"
       >
         {loading ? <Loader2 size={16} className="animate-spin" /> : "Update product"}
       </Button>

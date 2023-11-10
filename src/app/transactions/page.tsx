@@ -27,7 +27,11 @@ const Page: React.FC<PageProps> = () => {
     <PageContentLayout pageName="Transactions">
       <div className="mb-12 flex flex-col gap-4">
         <span>Account Balance</span>
-        {loadingTransactions ? (<Skeleton className="w-[200px] h-[50px]"/>) : (<span className="text-4xl font-semibold">₦{totalRev}</span>)}
+        {loadingTransactions ? (
+          <Skeleton className="w-[200px] h-[50px]" />
+        ) : (
+          <span className="text-4xl font-semibold">₦{totalRev}</span>
+        )}
       </div>
       <>
         {loadingTransactions ? (
@@ -51,19 +55,31 @@ const Page: React.FC<PageProps> = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {result?.map((each, index) => (
-                  <TableRow key={each.transactionId}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{each.customerEmail}</TableCell>
-                    <TableCell>{each.productName}</TableCell>
-                    <TableCell>{each.productPrice}</TableCell>
-                    <TableCell>
-                      {moment(new Date(each.time.seconds * 1000)).format(
-                        "DD MM YYYY"
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                <>
+                  {result ? (
+                    <>
+                      {result?.map((each, index) => (
+                        <TableRow key={each.transactionId}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{each.customerEmail}</TableCell>
+                          <TableCell>{each.productName}</TableCell>
+                          <TableCell>{each.productPrice}</TableCell>
+                          <TableCell>
+                            {moment(new Date(each.time.seconds * 1000)).format(
+                              "DD MM YYYY"
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  ) : (
+                    <div className="mt-4">
+                      <span className="opacity-80">
+                        You have no transactions yet
+                      </span>
+                    </div>
+                  )}
+                </>
               </TableBody>
             </Table>
             <ScrollBar orientation="horizontal" />

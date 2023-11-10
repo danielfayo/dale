@@ -49,6 +49,11 @@ const Page: React.FC<pageProps> = ({ params }) => {
     router.push(`/editproduct/${params.productId}`);
   };
 
+  const handleShareLink = () => {
+    navigator.clipboard.writeText(`dale-one.vercel.app/checkout/${params.productId}`)
+    toast({title: "Checkout link copied"})
+  }
+
   const handleDeleteProduct = async () => {
     setLoading(true);
     try {
@@ -89,6 +94,7 @@ const Page: React.FC<pageProps> = ({ params }) => {
           <DropdownMenuContent className="border-none">
             <DropdownMenuLabel>Options</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleShareLink}>Share Product</DropdownMenuItem>
             <DropdownMenuItem onClick={handleEditButton}>
               Edit Product
             </DropdownMenuItem>

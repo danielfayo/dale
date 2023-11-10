@@ -3,6 +3,7 @@
 import StoreInputs from "@/components/auth/StoreInputs";
 import { toast } from "@/components/ui/use-toast";
 import { auth } from "@/firebase/clientApp";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useUpdateProfile } from "react-firebase-hooks/auth";
 
@@ -11,6 +12,7 @@ type PageProps = {};
 const Page: React.FC<PageProps> = () => {
   const [name, setName] = useState("");
   const [updateProfile, updating, error] = useUpdateProfile(auth);
+  const router = useRouter()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -26,6 +28,7 @@ const Page: React.FC<PageProps> = () => {
 
       if (success) {
         toast({ title: "Details updated successfully" });
+        router.push("/overview")
       }
     } catch (error) {
       toast({ title: "Something went wrong", variant: "destructive" });

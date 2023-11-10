@@ -7,14 +7,21 @@ import { User } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useAuthState, useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 type PageProps = {};
 
 const Page: React.FC<PageProps> = () => {
+  const [user] = useAuthState(auth)
   const [createUserWithEmailAndPassword, userCred, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
   const router = useRouter()
+
+  useEffect(()=> {
+    if (user?.uid){
+      router.push("/overview")
+    }
+  },[user])
 
   const [signUpForm, setSignUpForm] = useState({
     email: "",
