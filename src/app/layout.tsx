@@ -1,10 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/redux/provider";
 
-const inter = Space_Grotesk({ subsets: ["latin"] });
+const inter = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Dale",
@@ -18,6 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head><link rel="icon" href="/assets/fav.svg" sizes="any" /></head>
       <body className={inter.className}>
         <ReduxProvider>
           {children}

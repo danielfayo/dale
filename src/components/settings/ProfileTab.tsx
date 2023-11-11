@@ -7,18 +7,47 @@ import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
+import { toast } from "../ui/use-toast";
+import { updateProfile } from "firebase/auth";
+import { Loader2 } from "lucide-react";
 
 type ProfileTabProps = {};
 
 const ProfileTab: React.FC<ProfileTabProps> = () => {
   const [user] = useAuthState(auth);
-  const [storeName, setStoreName] = useState("")
+  const [storeName, setStoreName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(()=> {setStoreName(user?.displayName!)}, [user])
+  useEffect(() => {
+    setStoreName(user?.displayName!);
+  }, [user]);
 
-  const handleStoreNameChange = (event : React.ChangeEvent<HTMLInputElement>) => {
-    setStoreName(event.target.value)
-  }
+  const handleStoreNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setStoreName(event.target.value);
+  };
+
+  const handleUpadateName = () => {
+    if (storeName.length < 4) {
+      return toast({
+        title: "Store name should be more than four characters",
+        variant: "destructive",
+      });
+    }
+    setLoading(true);
+    try {
+      updateProfile(user!, {
+        displayName: storeName,
+        photoURL: user?.photoURL,
+      });
+      toast({title: "Store name updated successfully"})
+    } catch (error) {
+      console.log(error);
+      toast({ title: "Something went wrong", variant: "destructive" });
+    }
+    setLoading(false);
+  };
   return (
     <>
       <div className="mt-8">
@@ -43,7 +72,13 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
             <label>Bio</label>
             <Textarea placeholder="Your bio goes here" />
           </div> */}
-      <Button disabled={storeName === user?.displayName} className="w-full md:w-fit mt-8">Save</Button>
+      <Button
+        onClick={handleUpadateName}
+        disabled={storeName === user?.displayName}
+        className="w-full md:w-fit mt-8"
+      >
+        {loading ? <Loader2 size={16} className="animate-spin" /> : "Save"}
+      </Button>
     </>
   );
 };

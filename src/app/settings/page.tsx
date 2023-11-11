@@ -1,11 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import PasswordTab from "@/components/settings/PasswordTab";
+import ProfileTab from "@/components/settings/ProfileTab";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PageContentLayout from "@/layouts/PageContentLayout";
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProfileTab from "@/components/settings/ProfileTab";
-import PasswordTab from "@/components/settings/PasswordTab";
 
 type pageProps = {};
 

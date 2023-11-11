@@ -40,6 +40,7 @@ const Page: React.FC<PageProps> = () => {
     event.preventDefault();
     try {
       signInWithEmailAndPassword(signinForm.email, signinForm.password);
+      toast({ title: "Sign in successful" });
       router.push("/overview")
     } catch (error) {
       console.log(error);

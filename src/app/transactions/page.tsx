@@ -23,6 +23,8 @@ const Page: React.FC<PageProps> = () => {
   const { result, loadingTransactions } = useGetTransactionData();
   const { totalRev } = useGetTotalRevenue();
 
+  // const sortedTransactions = result?.map(eachTransactions => ({...eachTransactions, moment(new Date(eachTransactions.time.seconds * 1000)).format}))
+
   return (
     <PageContentLayout pageName="Transactions">
       <div className="mb-12 flex flex-col gap-4">
