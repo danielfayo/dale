@@ -73,7 +73,7 @@ export default function Home() {
             height={200}
           /> */}
           <span className="text-2xl pb-4 text-center opacity-80">
-            You no products yet
+            You have no products yet
           </span>
           <Link className={`${buttonVariants()}`} href={"/createproduct"}>
             Create a new product

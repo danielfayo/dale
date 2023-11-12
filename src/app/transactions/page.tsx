@@ -2,7 +2,7 @@
 
 import useGetTransactionData from "@/hooks/useGetTransactions";
 import PageContentLayout from "@/layouts/PageContentLayout";
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,14 +16,21 @@ import moment from "moment";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import useGetTotalRevenue from "@/hooks/useGetTotalRevenue";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 type PageProps = {};
 
 const Page: React.FC<PageProps> = () => {
   const { result, loadingTransactions } = useGetTransactionData();
   const { totalRev } = useGetTotalRevenue();
+  const [order, setOrder] = useState("newest");
 
-  // const sortedTransactions = result?.map(eachTransactions => ({...eachTransactions, moment(new Date(eachTransactions.time.seconds * 1000)).format}))
+  const sortedTransactions = result
+    ?.map((eachTransaction) => ({
+      ...eachTransaction,
+      date: eachTransaction.time.seconds,
+    }))
+    .sort((a, b) => order === "newest" ? b.date - a.date : a.date - b.date);
 
   return (
     <PageContentLayout pageName="Transactions">
@@ -32,10 +39,26 @@ const Page: React.FC<PageProps> = () => {
         {loadingTransactions ? (
           <Skeleton className="w-[200px] h-[50px]" />
         ) : (
-          <span className="text-4xl font-semibold">₦{totalRev}</span>
+          <span className="text-4xl font-semibold">₦ {totalRev}</span>
         )}
       </div>
       <>
+        <div className="flex gap-4 mb-4">
+          <Button
+            className="text-xs py-1 rounded-full"
+            onClick={() => setOrder("newest")}
+            variant={`${order === "newest" ? "secondary" : "ghost"}`}
+          >
+            Newest First
+          </Button>{" "}
+          <Button
+            className="text-xs py-1 rounded-full"
+            onClick={() => setOrder("oldest")}
+            variant={`${order === "oldest" ? "secondary" : "ghost"}`}
+          >
+            Oldest First
+          </Button>
+        </div>
         {loadingTransactions ? (
           <div className="space-y-2">
             {[1, 2, 3, 4, 5].map((each) => (
@@ -58,9 +81,9 @@ const Page: React.FC<PageProps> = () => {
               </TableHeader>
               <TableBody>
                 <>
-                  {result ? (
+                  {result?.length! > 0 ? (
                     <>
-                      {result?.map((each, index) => (
+                      {sortedTransactions?.map((each, index) => (
                         <TableRow key={each.transactionId}>
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>{each.customerEmail}</TableCell>
@@ -75,8 +98,8 @@ const Page: React.FC<PageProps> = () => {
                       ))}
                     </>
                   ) : (
-                    <div className="mt-4">
-                      <span className="opacity-80">
+                    <div className="mt-4 ">
+                      <span className="opacity-80 text-xl">
                         You have no transactions yet
                       </span>
                     </div>

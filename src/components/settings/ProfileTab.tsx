@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
@@ -17,6 +17,21 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
   const [user] = useAuthState(auth);
   const [storeName, setStoreName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState<string>()
+  const profilePhotoRef = useRef<HTMLInputElement>(null);
+
+  const onSelectProfileImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = new FileReader();
+    if (e.target.files?.[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    reader.onload = (readerEvent) => {
+      if (readerEvent.target?.result) {
+        setProfilePhoto(readerEvent.target.result as string);
+      }
+    };
+  };
 
   useEffect(() => {
     setStoreName(user?.displayName!);
@@ -41,7 +56,7 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
         displayName: storeName,
         photoURL: user?.photoURL,
       });
-      toast({title: "Store name updated successfully"})
+      toast({ title: "Store name updated successfully" });
     } catch (error) {
       console.log(error);
       toast({ title: "Something went wrong", variant: "destructive" });
@@ -52,13 +67,32 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
     <>
       <div className="mt-8">
         <span className="text-base">Store Logo</span>
-        <div className="h-40 w-40 bg-muted rounded-full mt-4 relative">
-          <div className="relative w-32 h-32 mx-auto">
-            {user?.photoURL && (
-              <Image src={user?.photoURL as string} alt="profile photo" fill />
-            )}
-          </div>
+
+        <div className="relative w-24 h-24 mt-4 rounded-full mx-auto md:ml-0">
+          {!profilePhoto ? (
+            <Image
+              src={user?.photoURL as string}
+              alt="profile photo"
+              fill
+              style={{ borderRadius: "50%" }}
+            />
+          ) : (
+            <Image
+              src={profilePhoto as string}
+              alt="profile photo"
+              fill
+              objectFit="cover"
+              style={{ borderRadius: "50%" }}
+            />
+          )}
         </div>
+        {/* <Button className="w-full mt-4 md:w-fit" variant={"secondary"} onClick={() => profilePhotoRef.current?.click()}>
+          Change store image
+        </Button> */}
+        <Button className="w-full mt-4 md:w-fit" variant={"secondary"} onClick={() => profilePhotoRef.current?.click()}>
+          Change store image
+        </Button>
+        <input type="file" hidden ref={profilePhotoRef} onChange={onSelectProfileImage} />
       </div>
       <div className="mt-8">
         <label htmlFor="">Store Name</label>
@@ -75,6 +109,7 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
       <Button
         onClick={handleUpadateName}
         disabled={storeName === user?.displayName}
+        variant={"secondary"}
         className="w-full md:w-fit mt-8"
       >
         {loading ? <Loader2 size={16} className="animate-spin" /> : "Save"}

@@ -23,7 +23,7 @@ const Page: React.FC<PageProps> = () => {
     try {
       const success = await updateProfile({
         displayName: name,
-        photoURL: `https://robohash.org/${name}set=set4&bgset=bg1`,
+        photoURL: `https://robohash.org/${name}?set=set4&&bgset=bg2`,
       });
 
       if (success) {
