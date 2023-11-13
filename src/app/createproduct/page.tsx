@@ -143,7 +143,6 @@ const Page: React.FC<PageProps> = () => {
     const newProduct: Product = {
       productId: nanoid(),
       creatorId: user?.uid,
-      creatorDisplayName: user?.displayName,
       productName: productTexts.name,
       productDesc: productTexts.description,
       productPrice: productTexts.price,

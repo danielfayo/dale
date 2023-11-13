@@ -2,15 +2,17 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
 import { auth, firestore, storage } from "@/firebase/clientApp";
 import { toast } from "../ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { ArrowUpRight, Loader2 } from "lucide-react";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
+import Link from "next/link";
+import { Skeleton } from "../ui/skeleton";
 
 type ProfileTabProps = {};
 
@@ -54,7 +56,7 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
     }
     setLoading(true);
     try {
-      let downloadURL;
+      let downloadURL = null;
       if (profilePhoto) {
         const profileImageRef = ref(
           storage,
@@ -88,13 +90,24 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
   };
   return (
     <>
-      <div className="mt-8">
+      <div className="mt-8 flex items-center justify-between">
         <span className="text-xl">Update Profile</span>
+        {user && (
+          <Link
+            href={`/store/${user?.uid}`}
+            className={`flex items-center w-fit underline ${buttonVariants({
+              variant: "link",
+            })}`}
+          >
+            Preview <ArrowUpRight size={16} />
+          </Link>
+        )}
       </div>
       <div className="mt-8">
         <span className="text-base">Store Logo</span>
 
         <div className="relative w-24 h-24 mt-4 rounded-full">
+          {!user?.uid && <Skeleton className="w-24 h-24 rounded-full" />}
           {!profilePhoto ? (
             <Image
               src={user?.photoURL as string}

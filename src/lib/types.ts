@@ -28,7 +28,6 @@ export type ProductText = {
 export type Product = {
   productId: string;
   creatorId: string | undefined;
-  creatorDisplayName: string | null | undefined;
   productName: string;
   productDesc: string;
   productPrice: number | string;

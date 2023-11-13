@@ -21,6 +21,7 @@ import { toast } from "@/components/ui/use-toast";
 import { nanoid } from "nanoid";
 import { Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import useFetchProfile from "@/hooks/useFetchProfile";
 
 type PageProps = {
   params: { productId: string };
@@ -28,6 +29,7 @@ type PageProps = {
 
 const Page: React.FC<PageProps> = ({ params }) => {
   const { result, loadingItem } = useGetProductData(params.productId);
+  const {profile} = useFetchProfile(result?.creatorId!) 
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -82,10 +84,10 @@ const Page: React.FC<PageProps> = ({ params }) => {
             </div>
           </div>) : (<div className="mt-8 space-y-4">
           <div className="flex justify-between">
-            <div className="flex flex-col md:flex-row items-center gap-2">
-              <Badge variant={"secondary"}>{result?.productCategory}</Badge>
-              <Link href={""} className="underline hover:text-primary">
-                {result?.creatorDisplayName}
+            <div className="flex flex-col md:flex-row md:items-center gap-2">
+              <Badge className="w-fit" variant={"secondary"}>{result?.productCategory}</Badge>
+              <Link href={`/store/${result?.creatorId}`} className="underline hover:text-primary">
+                {profile?.providerData[0].displayName}
               </Link>
             </div>
             <span className="text-xl">₦{result?.productPrice}</span>
