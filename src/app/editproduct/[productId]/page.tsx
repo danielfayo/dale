@@ -76,7 +76,6 @@ const Page: React.FC<PageProps> = ({ params }) => {
       const newProduct: Product = {
         productId: result?.productId!,
         creatorId: result?.creatorId!,
-        creatorDisplayName: result?.creatorDisplayName!,
         productName: productName,
         productDesc: productDesc,
         productPrice: result?.productPrice!,
