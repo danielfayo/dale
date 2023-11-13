@@ -5,11 +5,12 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import Image from "next/image";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
+import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
+import { auth, firestore, storage } from "@/firebase/clientApp";
 import { toast } from "../ui/use-toast";
-import { updateProfile } from "firebase/auth";
 import { Loader2 } from "lucide-react";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { doc, updateDoc } from "firebase/firestore";
 
 type ProfileTabProps = {};
 
@@ -17,8 +18,9 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
   const [user] = useAuthState(auth);
   const [storeName, setStoreName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState<string>()
+  const [profilePhoto, setProfilePhoto] = useState<string>();
   const profilePhotoRef = useRef<HTMLInputElement>(null);
+  const [updateProfile, updating, error] = useUpdateProfile(auth);
 
   const onSelectProfileImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -43,7 +45,7 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
     setStoreName(event.target.value);
   };
 
-  const handleUpadateName = () => {
+  const handleUpdateProfile = async () => {
     if (storeName.length < 4) {
       return toast({
         title: "Store name should be more than four characters",
@@ -52,11 +54,32 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
     }
     setLoading(true);
     try {
-      updateProfile(user!, {
-        displayName: storeName,
-        photoURL: user?.photoURL,
+      let downloadURL;
+      if (profilePhoto) {
+        const profileImageRef = ref(
+          storage,
+          `productCovers/${user?.uid}/image`
+        );
+        await uploadString(profileImageRef, profilePhoto!, "data_url");
+        downloadURL = await getDownloadURL(profileImageRef);
+        await updateDoc(doc(firestore, `users`, `${user?.uid}`), {
+          providerData: [{ ...user?.providerData[0], photoURL: downloadURL }],
+        });
+      }
+
+      if (storeName) {
+        await updateDoc(doc(firestore, `users`, `${user?.uid}`), {
+          providerData: [{ ...user?.providerData[0], displayName: storeName }],
+        });
+      }
+
+      await updateProfile({
+        displayName: storeName ? storeName : user?.displayName,
+        photoURL: downloadURL ? downloadURL : user?.photoURL,
       });
-      toast({ title: "Store name updated successfully" });
+
+      setProfilePhoto("");
+      toast({ title: "Profile updated successfully" });
     } catch (error) {
       console.log(error);
       toast({ title: "Something went wrong", variant: "destructive" });
@@ -66,13 +89,17 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
   return (
     <>
       <div className="mt-8">
+        <span className="text-xl">Update Profile</span>
+      </div>
+      <div className="mt-8">
         <span className="text-base">Store Logo</span>
 
-        <div className="relative w-24 h-24 mt-4 rounded-full mx-auto md:ml-0">
+        <div className="relative w-24 h-24 mt-4 rounded-full">
           {!profilePhoto ? (
             <Image
               src={user?.photoURL as string}
               alt="profile photo"
+              objectFit="cover"
               fill
               style={{ borderRadius: "50%" }}
             />
@@ -86,13 +113,30 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
             />
           )}
         </div>
-        {/* <Button className="w-full mt-4 md:w-fit" variant={"secondary"} onClick={() => profilePhotoRef.current?.click()}>
-          Change store image
-        </Button> */}
-        <Button className="w-full mt-4 md:w-fit" variant={"secondary"} onClick={() => profilePhotoRef.current?.click()}>
-          Change store image
-        </Button>
-        <input type="file" hidden ref={profilePhotoRef} onChange={onSelectProfileImage} />
+        <div className="flex flex-col">
+          <Button
+            className="w-full mt-4 md:w-fit"
+            variant={"secondary"}
+            onClick={() => profilePhotoRef.current?.click()}
+          >
+            Select Image
+          </Button>
+          {profilePhoto && (
+            <Button
+              variant={"destructive"}
+              className="w-full mt-4 md:w-fit"
+              onClick={() => setProfilePhoto("")}
+            >
+              Remove Image
+            </Button>
+          )}
+        </div>
+        <input
+          type="file"
+          hidden
+          ref={profilePhotoRef}
+          onChange={onSelectProfileImage}
+        />
       </div>
       <div className="mt-8">
         <label htmlFor="">Store Name</label>
@@ -107,12 +151,15 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
             <Textarea placeholder="Your bio goes here" />
           </div> */}
       <Button
-        onClick={handleUpadateName}
-        disabled={storeName === user?.displayName}
-        variant={"secondary"}
+        onClick={handleUpdateProfile}
+        disabled={storeName === user?.displayName && !profilePhoto}
         className="w-full md:w-fit mt-8"
       >
-        {loading ? <Loader2 size={16} className="animate-spin" /> : "Save"}
+        {loading ? (
+          <Loader2 size={16} className="animate-spin" />
+        ) : (
+          "Update Profile"
+        )}
       </Button>
     </>
   );

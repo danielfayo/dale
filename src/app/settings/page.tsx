@@ -1,3 +1,4 @@
+import EmailTab from "@/components/settings/EmailTab";
 import PasswordTab from "@/components/settings/PasswordTab";
 import ProfileTab from "@/components/settings/ProfileTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,12 +14,16 @@ const page: React.FC<pageProps> = () => {
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="password">Password</TabsTrigger>
+          <TabsTrigger value="email">Email</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
           <ProfileTab/>
         </TabsContent>
         <TabsContent value="password">
           <PasswordTab/>
+        </TabsContent>
+        <TabsContent value="email">
+          <EmailTab/>
         </TabsContent>
       </Tabs>
     </PageContentLayout>

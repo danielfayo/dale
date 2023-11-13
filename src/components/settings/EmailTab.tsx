@@ -1,47 +1,41 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
+import { toast } from "../ui/use-toast";
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
-  updatePassword,
+  updateEmail,
 } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
-import { toast } from "../ui/use-toast";
-import { Loader2 } from "lucide-react";
 
-type PasswordTabProps = {};
+type EmailTabProps = {};
 
-const PasswordTab: React.FC<PasswordTabProps> = () => {
+const EmailTab: React.FC<EmailTabProps> = () => {
   const [user] = useAuthState(auth);
-  const [passwords, setPasswords] = useState({
-    oldPassword: "",
-    newPassword: "",
-  });
+  const [creds, setCreds] = useState({ password: "", email: "" });
   const [loading, setLoading] = useState(false);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswords((prev) => ({
+    setCreds((prev) => ({
       ...prev,
       [event.target.id]: event.target.value,
     }));
   };
 
-  const handleUpdatePassword = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleUpdateEmail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!passwords.oldPassword) {
+    if (!creds.password) {
       return toast({
         title: "Please fill in all inputs",
         variant: "destructive",
       });
     }
 
-    if (!passwords.newPassword) {
+    if (!creds.email) {
       return toast({
         title: "Please fill in all inputs",
         variant: "destructive",
@@ -49,12 +43,12 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
     }
     const credentials = EmailAuthProvider.credential(
       user?.email!,
-      passwords.oldPassword
+      creds.password
     );
     setLoading(true);
     try {
       await reauthenticateWithCredential(user!, credentials);
-      await updatePassword(user!, passwords.newPassword);
+      await updateEmail(user!, creds.email);
       toast({ title: "Password Updated Successfully" });
     } catch (error) {
       console.log(error);
@@ -64,27 +58,27 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
   };
 
   return (
-    <form onSubmit={handleUpdatePassword}>
+    <form onSubmit={handleUpdateEmail}>
       <div className="mt-8">
-        <span className="text-xl">Update Password</span>
+        <span className="text-xl">Update Email</span>
       </div>
       <div className="mt-8">
-        <label>Old Password</label>
+        <label>Your Password</label>
         <Input
           required
           type="password"
-          id="oldPassword"
-          placeholder="Old password here"
+          id="password"
+          placeholder="Password here"
           onChange={handleChange}
         />
       </div>
       <div className="mt-8">
-        <label>New Password</label>
+        <label>New Email</label>
         <Input
           required
-          type="password"
-          id="newPassword"
-          placeholder="New password here"
+          type="email"
+          id="email"
+          placeholder="eg. example@email.com"
           onChange={handleChange}
         />
       </div>
@@ -99,4 +93,4 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
     </form>
   );
 };
-export default PasswordTab;
+export default EmailTab;

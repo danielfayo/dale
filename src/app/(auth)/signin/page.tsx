@@ -36,10 +36,10 @@ const Page: React.FC<PageProps> = () => {
   };
 
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      signInWithEmailAndPassword(signinForm.email, signinForm.password);
+      await signInWithEmailAndPassword(signinForm.email, signinForm.password);
       toast({ title: "Sign in successful" });
       router.push("/overview")
     } catch (error) {
