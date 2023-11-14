@@ -30,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = () => {
               href={"/register"}
               className={`${buttonVariants({ variant: "outline" })}`}
             >
-              Registar
+              Register
             </Link>
             <Link
               href={"/signin"}

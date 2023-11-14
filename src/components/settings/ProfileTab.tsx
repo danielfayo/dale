@@ -56,16 +56,20 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
     }
     setLoading(true);
     try {
-      let downloadURL = null;
+      // let downloadURL = null;
       if (profilePhoto) {
         const profileImageRef = ref(
           storage,
           `productCovers/${user?.uid}/image`
         );
         await uploadString(profileImageRef, profilePhoto!, "data_url");
-        downloadURL = await getDownloadURL(profileImageRef);
+        const downloadURL = await getDownloadURL(profileImageRef);
         await updateDoc(doc(firestore, `users`, `${user?.uid}`), {
           providerData: [{ ...user?.providerData[0], photoURL: downloadURL }],
+        });
+        await updateProfile({
+          displayName: user?.displayName,
+          photoURL: downloadURL
         });
       }
 
@@ -73,12 +77,16 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
         await updateDoc(doc(firestore, `users`, `${user?.uid}`), {
           providerData: [{ ...user?.providerData[0], displayName: storeName }],
         });
+        await updateProfile({
+          displayName: storeName,
+          photoURL: user?.photoURL,
+        });
       }
 
-      await updateProfile({
-        displayName: storeName ? storeName : user?.displayName,
-        photoURL: downloadURL ? downloadURL : user?.photoURL,
-      });
+      // await updateProfile({
+      //   displayName: storeName ? storeName : user?.displayName,
+      //   photoURL: downloadURL ? downloadURL : user?.photoURL,
+      // });
 
       setProfilePhoto("");
       toast({ title: "Profile updated successfully" });
