@@ -72,6 +72,7 @@ export const PurchaseEmail = ({
               color: "#333",
               marginBottom: "8px",
             }}
+            key={id}
           >
             <Text
               style={{
