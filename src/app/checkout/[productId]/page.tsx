@@ -16,7 +16,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { firestore } from "@/firebase/clientApp";
-import { TransactionType } from "@/lib/types";
+import { Product, TransactionType } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { nanoid } from "nanoid";
 import { Loader2 } from "lucide-react";
@@ -29,7 +29,7 @@ type PageProps = {
 
 const Page: React.FC<PageProps> = ({ params }) => {
   const { result, loadingItem } = useGetProductData(params.productId);
-  const {profile} = useFetchProfile(result?.creatorId!) 
+  const { profile } = useFetchProfile(result?.creatorId!);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -37,9 +37,18 @@ const Page: React.FC<PageProps> = ({ params }) => {
     setEmail(event.target.value);
   };
 
+
   const handlePurchase = async () => {
     setLoading(true);
     try {
+      await fetch("/api/email", {
+        method: "POST",
+        body: JSON.stringify({
+          product: result,
+          email: email
+        }),
+      });
+
       const batch = writeBatch(firestore);
       const productDocRef = doc(firestore, "products", `${result?.productId}`);
       batch.update(productDocRef, { sales: increment(1) });
@@ -75,28 +84,48 @@ const Page: React.FC<PageProps> = ({ params }) => {
     <div className="mt-8 px-4 max-w-[1280px] mx-auto md:flex md:gap-4">
       <div className="md:w-1/2 lg:w-2/3">
         <div className="relative w-full aspect-square max-h-[608px]">
-          {loadingItem ? (<Skeleton className="w-full h-full"/>) : (<Image src={result?.productCoverURL!} alt="product image" fill objectFit="cover" />)}
+          {loadingItem ? (
+            <Skeleton className="w-full h-full" />
+          ) : (
+            <Image
+              src={result?.productCoverURL!}
+              alt="product image"
+              fill
+              objectFit="cover"
+            />
+          )}
         </div>
-        {loadingItem ? (<div className="space-y-4 mt-8">
-            <Skeleton className="w-[200px] h-[24px]"/>
+        {loadingItem ? (
+          <div className="space-y-4 mt-8">
+            <Skeleton className="w-[200px] h-[24px]" />
             <div className="space-y-2">
-              {[1, 2, 3].map(each => (<Skeleton key={each} className="h-[20px] w-full"/>))}
+              {[1, 2, 3].map((each) => (
+                <Skeleton key={each} className="h-[20px] w-full" />
+              ))}
             </div>
-          </div>) : (<div className="mt-8 space-y-4">
-          <div className="flex justify-between">
-            <div className="flex flex-col md:flex-row md:items-center gap-2">
-              <Badge className="w-fit" variant={"secondary"}>{result?.productCategory}</Badge>
-              <Link href={`/store/${result?.creatorId}`} className="underline hover:text-primary">
-                {profile?.providerData[0].displayName}
-              </Link>
+          </div>
+        ) : (
+          <div className="mt-8 space-y-4">
+            <div className="flex justify-between">
+              <div className="flex flex-col md:flex-row md:items-center gap-2">
+                <Badge className="w-fit" variant={"secondary"}>
+                  {result?.productCategory}
+                </Badge>
+                <Link
+                  href={`/store/${result?.creatorId}`}
+                  className="underline hover:text-primary"
+                >
+                  {profile?.providerData[0].displayName}
+                </Link>
+              </div>
+              <span className="text-xl">₦{result?.productPrice}</span>
             </div>
-            <span className="text-xl">₦{result?.productPrice}</span>
+            <div>
+              <span className="text-xl">{result?.productName}</span>
+              <p className="text-base opacity-80">{result?.productDesc}</p>
+            </div>
           </div>
-          <div>
-            <span className="text-xl">{result?.productName}</span>
-            <p className="text-base opacity-80">{result?.productDesc}</p>
-          </div>
-        </div>)}
+        )}
       </div>
       <div className="mt-8 md:w-1/2 md:mt-0 lg:w-1/3">
         <h4 className="text-xl font-semibold">Checkout</h4>
