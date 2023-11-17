@@ -3,17 +3,28 @@
 import useFetchProducts from "@/hooks/useFetchProducts";
 import PageContentLayout from "@/layouts/PageContentLayout";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/firebase/clientApp";
+import { useRouter } from "next/navigation";
 
 type PageProps = {};
 
 const Page: React.FC<PageProps> = () => {
   const { productSnippets, loading } = useFetchProducts();
+  const [user] = useAuthState(auth)
+  const router = useRouter()
+
+  useEffect(()=> {
+    if (user === null){
+      router.push("/signin")
+    }
+  }, [user])
 
   return (
     <PageContentLayout

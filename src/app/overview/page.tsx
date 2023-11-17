@@ -21,11 +21,20 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import moment from "moment";
 import { Coins } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [user] = useAuthState(auth);
   const { productSnippets, loading } = useFetchProducts();
   const { result, loadingTransactions } = useGetTransactionData();
+  const router = useRouter()
+
+  useEffect(()=> {
+    if (user === null){
+      router.push("/signin")
+    }
+  }, [user])
 
   let totalSales = 0;
   let totalRevenue = 0;

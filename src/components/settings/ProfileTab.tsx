@@ -13,6 +13,7 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import { useRouter } from "next/navigation";
 
 type ProfileTabProps = {};
 
@@ -23,6 +24,13 @@ const ProfileTab: React.FC<ProfileTabProps> = () => {
   const [profilePhoto, setProfilePhoto] = useState<string>();
   const profilePhotoRef = useRef<HTMLInputElement>(null);
   const [updateProfile, updating, error] = useUpdateProfile(auth);
+  const router = useRouter()
+
+  useEffect(()=> {
+    if (user === null){
+      router.push("/signin")
+    }
+  }, [user])
 
   const onSelectProfileImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();

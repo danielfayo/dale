@@ -121,12 +121,7 @@ const Page: React.FC<PageProps> = () => {
       setCategoryError("Please select a category for the product");
       return;
     }
-    if (!productTexts.price) {
-      setPriceError("Please enter a price");
-      return;
-    }
-
-    if (!contentFiles) {
+    if (!(contentFiles.length > 0)) {
       setContentError(true);
       return;
     }
@@ -137,6 +132,11 @@ const Page: React.FC<PageProps> = () => {
         return;
       }
     }
+    if (!productTexts.price) {
+      setPriceError("Please enter a price");
+      return;
+    }
+
 
     setLoading(true);
 

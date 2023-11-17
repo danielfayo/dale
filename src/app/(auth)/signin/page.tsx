@@ -19,6 +19,7 @@ const Page: React.FC<PageProps> = () => {
 
   useEffect(()=> {
     if (user?.uid){
+      toast({ title: "Sign in successful" });
       router.push("/overview")
     }
   },[user])
@@ -40,8 +41,7 @@ const Page: React.FC<PageProps> = () => {
     event.preventDefault();
     try {
       await signInWithEmailAndPassword(signinForm.email, signinForm.password);
-      toast({ title: "Sign in successful" });
-      router.push("/overview")
+      
     } catch (error) {
       console.log(error);
       toast({ title: "Something went wrong", variant: "destructive" });

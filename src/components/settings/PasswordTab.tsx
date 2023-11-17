@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -12,6 +12,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
 import { toast } from "../ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type PasswordTabProps = {};
 
@@ -22,6 +23,13 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
     newPassword: "",
   });
   const [loading, setLoading] = useState(false);
+  const router = useRouter()
+
+  useEffect(()=> {
+    if (user === null){
+      router.push("/signin")
+    }
+  }, [user])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPasswords((prev) => ({

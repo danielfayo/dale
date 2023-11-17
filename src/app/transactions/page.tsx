@@ -2,7 +2,7 @@
 
 import useGetTransactionData from "@/hooks/useGetTransactions";
 import PageContentLayout from "@/layouts/PageContentLayout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -17,13 +17,24 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import useGetTotalRevenue from "@/hooks/useGetTotalRevenue";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/firebase/clientApp";
 
 type PageProps = {};
 
 const Page: React.FC<PageProps> = () => {
+  const [user] = useAuthState(auth)
   const { result, loadingTransactions } = useGetTransactionData();
   const { totalRev } = useGetTotalRevenue();
   const [order, setOrder] = useState("newest");
+  const router = useRouter()
+
+  useEffect(()=> {
+    if (user === null){
+      router.push("/signin")
+    }
+  }, [user])
 
   const sortedTransactions = result
     ?.map((eachTransaction) => ({
