@@ -39,6 +39,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
 
 
   const handlePurchase = async () => {
+    if (!email)return
     setLoading(true);
     try {
       await fetch("/api/email", {
@@ -142,6 +143,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
               value={email}
               onChange={handleChangeEmail}
             />
+            {!email && <span className="text-xs text-red-400 my-4">Please enter a valid email</span>}
           </div>
           <div className="relative">
             <label htmlFor="">Card Number</label>

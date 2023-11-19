@@ -13,6 +13,7 @@ import { auth } from "@/firebase/clientApp";
 import { toast } from "../ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FIREBASE_ERRORS } from "@/firebase/error";
 
 type PasswordTabProps = {};
 
@@ -23,6 +24,7 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
     newPassword: "",
   });
   const [loading, setLoading] = useState(false);
+  const [formError, setformError] = useState("")
   const router = useRouter()
 
   useEffect(()=> {
@@ -64,9 +66,10 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
       await reauthenticateWithCredential(user!, credentials);
       await updatePassword(user!, passwords.newPassword);
       toast({ title: "Password Updated Successfully" });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      toast({ title: "Something went wrong", variant: "destructive" });
+      alert("error")
+      setformError(error)
     }
     setLoading(false);
   };
@@ -96,7 +99,7 @@ const PasswordTab: React.FC<PasswordTabProps> = () => {
           onChange={handleChange}
         />
       </div>
-
+      {formError && <span className="text-xs text-red-400">{FIREBASE_ERRORS[formError as keyof typeof FIREBASE_ERRORS]}</span>}
       <Button className="mt-8 w-full md:w-fit">
         {loading ? (
           <Loader2 size={16} className="animate-spin" />

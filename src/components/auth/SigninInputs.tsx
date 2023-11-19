@@ -3,15 +3,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { FIREBASE_ERRORS } from "@/firebase/error";
 
 type SigninInputsProps = {
     signinForm: {email: string, password: string}
     handleChange: (event : React.ChangeEvent<HTMLInputElement>) => void
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
     loading: boolean
+    error: string | undefined
 };
 
-const SigninInputs: React.FC<SigninInputsProps> = ({signinForm, handleChange, onSubmit, loading}) => {
+const SigninInputs: React.FC<SigninInputsProps> = ({signinForm, handleChange, onSubmit, loading, error}) => {
   
 
   return (
@@ -47,6 +49,7 @@ const SigninInputs: React.FC<SigninInputsProps> = ({signinForm, handleChange, on
               required
             />
           </div>
+          {error && <span className="text-red-400 text-xs">{FIREBASE_ERRORS[error as keyof typeof FIREBASE_ERRORS]}</span>}
           <Button disabled={loading} type="submit" className="mt-8 mb-4 w-full">{loading ? (<Loader2 className="animate-spin" size={16}/>) : "Sign In"}</Button>
         </form>
 
